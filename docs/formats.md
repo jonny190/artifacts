@@ -10,6 +10,27 @@ Served as-is on its own page. No processing.
 
 Rendered server-side (via marked) into a styled page. The original source stays available at `/a/:slug/source`. Markdown renders from its source on every view, so the settings below apply to existing artifacts the next time they load, with no re-publish.
 
+### Mermaid diagrams
+
+A fenced block tagged `mermaid` is drawn as a diagram:
+
+````markdown
+```mermaid
+flowchart LR
+  A[Publish] --> B{Type?}
+  B -->|md| C[marked]
+  B -->|jsx| D[Babel]
+```
+````
+
+The drawing happens in the reader's browser, using Mermaid 11 from jsDelivr. The library is only
+fetched on pages that have a diagram, so plain Markdown loads nothing extra. Diagrams follow the
+page theme, and redraw when the reader flips it with the frame's theme button or their OS setting.
+
+If Mermaid cannot parse a block, or the reader has no route to jsDelivr, the block stays on the
+page as ordinary code, so nothing is lost. Mermaid runs at its `strict` security level: HTML in
+labels is escaped and `click` handlers are switched off.
+
 ### Markdown render settings
 
 Four global knobs, set in the dashboard Settings popover or with `PUT /api/config`. The `MD_FONT`,
